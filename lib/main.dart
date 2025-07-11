@@ -180,8 +180,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
   @override
   void initState() {
     super.initState();
@@ -202,36 +200,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-    _showNotification();
-  }
-
-  Future<void> _showNotification() async {
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('your channel id', 'your channel name',
-            channelDescription: 'your channel description',
-            importance: Importance.max,
-            priority: Priority.high,
-            ticker: 'ticker');
-
-    const DarwinNotificationDetails darwinNotificationDetails =
-        DarwinNotificationDetails();
-
-    const NotificationDetails notificationDetails = NotificationDetails(
-        android: androidNotificationDetails, iOS: darwinNotificationDetails);
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'おねがい社長 通知テスト',
-      'これはテスト通知です！アプリを閉じても届きます！',
-      notificationDetails,
-      payload: 'item x',
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -244,19 +212,13 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'You have pushed the button this many times:',
+              '登録イベントはここに表示',
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            // TODO: イベントリストを表示するListView.builderなどをここに追加予定
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
