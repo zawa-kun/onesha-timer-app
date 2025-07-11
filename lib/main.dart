@@ -1,4 +1,6 @@
+import 'dart:convert'; // json操作
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -28,12 +30,12 @@ class AppEvent {
     'id': id,
     'title': title,
     'body': body,
-    'hout': hour,
+    'hour': hour,
     'minute': minute,
   };
 
   // Map(JSONから読み込んだ形式)からAppEventオブジェクトを作成するファクトリコンストラクタ
-  factory AppEvent.formJson(Map<String, dynamic> json) {
+  factory AppEvent.fromJson(Map<String, dynamic> json) {
     return AppEvent(
       id: json['id'] as int,
       title: json['title'] as String,
@@ -96,24 +98,30 @@ void main() async {
     debugPrint('厳格なアラームの許可が否認されました。');
   }
 
-  await flutterLocalNotificationsPlugin.cancelAll();
+  await flutterLocalNotificationsPlugin.cancelAll(); // 既存の通知をすべてキャンセル（起動毎に通知を設定し、重複を防ぐため。）
 
-  final List<AppEvent> appEvents = [
-    const AppEvent(
-      id: 0,
-      title: 'おねがい社長イベント通知',
-      body: '昼の悪徳業者、国際事業の時間です！',
-      hour: 12,
-      minute: 0,
-    ),
-    const AppEvent(
-      id: 1,
-      title: 'おねがい社長イベント通知',
-      body: '夜の国際事業の時間です！',
-      hour: 18,
-      minute: 0,
-    ),
-  ];
+  List<AppEvent> appEvents = await loadAppEvents(); // 保存されているイベントを読み込む.
+
+  if (appEvents.isEmpty) {
+    debugPrint('初回起動またはイベントデータが無いため、デフォルトイベントを設定');
+    appEvents = [
+      const AppEvent(
+        id: 0,
+        title: 'おねがい社長イベント通知',
+        body: '昼の悪徳業者、国際事業の時間です！',
+        hour: 12,
+        minute: 0,
+      ),
+      const AppEvent(
+        id: 1,
+        title: 'おねがい社長イベント通知',
+        body: '夜の国際事業の時間です！',
+        hour: 18,
+        minute: 0,
+      ),
+    ];
+    await saveAppEvents(appEvents); //デフォルトイベントを保存
+  }
 
   for (var event in appEvents) {
     await _scheduleDailyNotification(
@@ -176,6 +184,37 @@ tz.TZDateTime _nextInstanceOfTime(int hour, int minute) {
   }
   return scheduledDate;
 }
+
+
+const String _kAppEventsKey = 'app_events'; // SharedPreferencesに保存する際のキー
+
+// イベントリストを保存する関数
+Future<void> saveAppEvents(List<AppEvent> events) async {
+  final prefs = await SharedPreferences.getInstance();
+  final List<String> jsonStringList =
+    events.map((event) => jsonEncode(event.toJson())).toList();
+  await prefs.setStringList(_kAppEventsKey, jsonStringList);
+  debugPrint('SharedPreferencesにAppEventsが保存されました');
+}
+
+// イベントリストを読み込む関数
+Future<List<AppEvent>> loadAppEvents() async {
+  final prefs = await SharedPreferences.getInstance();
+  final List<String>? jsonStringList = prefs.getStringList(_kAppEventsKey);
+
+  if (jsonStringList == null) {
+    debugPrint('AppEventSharedPreferences内に見つかりませんでした');
+    return [];
+  }
+
+  // json文字列のリストをAppEventオブジェクトのリストに変換
+  final List<AppEvent> events = jsonStringList
+    .map((jsonString) => AppEvent.fromJson(jsonDecode(jsonString)))
+    .toList();
+  debugPrint('AppEventをSharedPreferencesから読み込みました');
+  return events;
+}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
