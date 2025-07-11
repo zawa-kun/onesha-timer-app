@@ -194,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     debugPrint('--- 予定されたアラームリスト ---');
     if (pendingNotificationRequests.isEmpty) {
-      debugPrint("予定された通知はありません");
+      debugPrint('予定された通知はありません');
     } else {
       for (var request in pendingNotificationRequests) {
         debugPrint('ID: ${request.id}, Title: ${request.title}, Payload: ${request.payload}');
