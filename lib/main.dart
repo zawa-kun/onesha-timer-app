@@ -7,7 +7,7 @@ import 'package:timezone/data/latest_all.dart' as tz;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-// イベントを表現するデータクラス
+// イベントのデータクラス
 class AppEvent {
   final int id;
   final String title;
@@ -22,7 +22,29 @@ class AppEvent {
     required this.hour,
     required this.minute,
   });
+
+  // AppEventオブジェクトからMap（JSONに変換しやすい形式）を作成するファクトリメソッド
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'title': title,
+    'body': body,
+    'hout': hour,
+    'minute': minute,
+  };
+
+  // Map(JSONから読み込んだ形式)からAppEventオブジェクトを作成するファクトリコンストラクタ
+  factory AppEvent.formJson(Map<String, dynamic> json) {
+    return AppEvent(
+      id: json['id'] as int,
+      title: json['title'] as String,
+      body: json['body'] as String,
+      hour: json['hour'] as int,
+      minute: json['minute'] as int,
+    );
+  }
 }
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
