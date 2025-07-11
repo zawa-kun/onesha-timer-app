@@ -1,0 +1,28 @@
+# Flutter/ビルド関連
+*.class
+*.log
+*.pyc
+*.swp
+.atom/
+.dart_tool/
+.svn/
+migrate_working_dir/
+transfer-info.md
+build/
+.buildinglog/
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+
+# IDEエディタ関連
+*.iml
+*.ipr
+*iws
+.idea/
+
+# VSコード
+.vscode/
+
+# OSや一時ファイル
+.DS_Store
+*.log
