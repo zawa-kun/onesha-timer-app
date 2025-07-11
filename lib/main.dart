@@ -21,14 +21,14 @@ void main() async {
     appEvents = [
       const AppEvent(
         id: 0,
-        title: 'おねがい社長イベント通知',
+        title: '昼の悪徳業者・国際事業',
         body: '昼の悪徳業者、国際事業の時間です！',
         hour: 12,
         minute: 0,
       ),
       const AppEvent(
         id: 1,
-        title: 'おねがい社長イベント通知',
+        title: '夜の国際事業',
         body: '夜の国際事業の時間です！',
         hour: 18,
         minute: 0,
