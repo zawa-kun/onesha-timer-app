@@ -5,6 +5,7 @@ class AppEvent {
   final String body;
   final int hour;
   final int minute;
+  final bool isEnabled;
 
   const AppEvent({
     required this.id,
@@ -12,6 +13,7 @@ class AppEvent {
     required this.body,
     required this.hour,
     required this.minute,
+    this.isEnabled = true, // デフォルトはtrue(有効)
   });
 
   // AppEventオブジェクトからMap（JSONに変換しやすい形式）を作成するファクトリメソッド
@@ -21,6 +23,7 @@ class AppEvent {
     'body': body,
     'hour': hour,
     'minute': minute,
+    'isEnabled': isEnabled,
   };
 
   // Map(JSONから読み込んだ形式)からAppEventオブジェクトを作成するファクトリコンストラクタ
@@ -31,6 +34,7 @@ class AppEvent {
       body: json['body'] as String,
       hour: json['hour'] as int,
       minute: json['minute'] as int,
+      isEnabled: json['isEnabled'] as bool,
     );
   }
 }

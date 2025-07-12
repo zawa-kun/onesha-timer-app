@@ -7,7 +7,7 @@ import 'package:onesha_timer_app/models/app_event.dart';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-// 毎日の通知をスケジュールする関数
+// 単一の通知をスケジュールする関数
 Future<void> _scheduleDailyNotification({
   required int id,
   required String title,
@@ -113,18 +113,40 @@ Future<void> requestNoificationPermissions() async {
 }
 
 // すべての通知をキャンセルする関数
-Future<void> cancelAllNotification() async {
+Future<void> cancelAllNotifications() async {
     await flutterLocalNotificationsPlugin.cancelAll();
 }
 
+// イベントに基づいて通知をスケジュールする関数
 Future<void> scheduleAppEventsNotifications(List<AppEvent> appEvents) async {
+  // 既存の通知をすべてキャンセル
+  await flutterLocalNotificationsPlugin.cancelAll();
+
   for (var event in appEvents){
-    await _scheduleDailyNotification(
-      id: event.id, 
-      title: event.title, 
-      body: event.body, 
-      hour: event.hour, 
-      minute: event.minute
-    );
+    if (event.isEnabled) {
+      await _scheduleDailyNotification(
+        id: event.id, 
+        title: event.title, 
+        body: event.body, 
+        hour: event.hour, 
+        minute: event.minute
+      );
+      debugPrint('Scheduled notification for event ${event.id} (${event.title}) - ${event.hour}:${event.minute}.');
+    } else {
+      debugPrint('eventID: ${event.id}(${event.title}) は通知が無効化されています。現在スケジュールされていません。');
+    }
+  }
+}
+
+
+Future<void> disableAppEventNotification({
+  required int id,
+  required bool isEnabled
+}) async {
+  // 通知をオン／オフするロジック
+  if (isEnabled) {
+    // off
+  } else {
+    // on
   }
 }

@@ -12,7 +12,7 @@ void main() async {
   // 権限のリクエスト
   await requestNoificationPermissions();
   // 既存の通知をすべてキャンセル(起動毎に通知が追加され,通知重複を防ぐため。)
-  await cancelAllNotification(); 
+  await cancelAllNotifications(); 
   // 保存されているイベントを読み込む.
   List<AppEvent> appEvents = await loadAppEvents(); 
 
@@ -25,6 +25,7 @@ void main() async {
         body: '昼の悪徳業者、国際事業の時間です！',
         hour: 12,
         minute: 0,
+        isEnabled: true,
       ),
       const AppEvent(
         id: 1,
@@ -32,6 +33,7 @@ void main() async {
         body: '夜の国際事業の時間です！',
         hour: 18,
         minute: 0,
+        isEnabled: true,
       ),
     ];
     await saveAppEvents(appEvents); //デフォルトイベントを保存
