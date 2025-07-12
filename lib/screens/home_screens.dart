@@ -77,8 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.title),
+          title: Text(widget.title), 
         ),
         body: _appEvents.isEmpty
             ? const Center(
@@ -98,12 +97,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemBuilder: (context, index) {
                   final event = _appEvents[index];
                   return Card(
-                    margin: const EdgeInsets.all(8.0),
+                    margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    elevation: 4.0,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row( // Row を使って内容とスイッチを横並びにする
                         mainAxisAlignment: MainAxisAlignment.spaceBetween, // 両端に配置
                         children: [
+                          Icon(Icons.access_time, color: Theme.of(context).primaryColor),
+                          const SizedBox(width: 12),
                           Expanded( // テキスト部分がスペースを最大限使うように
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,20 +113,30 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Text(
                                   event.title,
                                   style: const TextStyle(
-                                      fontSize: 18, fontWeight: FontWeight.bold),
+                                      fontSize: 18, 
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                  ),
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                    '${event.hour.toString().padLeft(2, '0')}:${event.minute.toString().padLeft(2, '0')}'),
+                                const SizedBox(height: 6),
+                                Row(
+                                  children: [
+                                    Text(
+                                        '${event.hour.toString().padLeft(2, '0')}:${event.minute.toString().padLeft(2, '0')}',
+                                        style: const TextStyle(fontSize: 16, color: Color.fromARGB(255, 0, 0, 0)),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
-                          Switch( // ★ここから追加
+                          Switch(
                             value: event.isEnabled, // 現在のオン/オフ状態
                             onChanged: (newValue) {
                               _toggleEventEnabled(index, newValue); // スイッチが切り替わったときの処理
                             },
-                          ), // ★ここまで追加
+                            activeColor: Theme.of(context).primaryColor,
+                          ),
                         ],
                       ),
                     ),

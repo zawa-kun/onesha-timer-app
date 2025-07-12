@@ -45,7 +45,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -54,11 +53,52 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'おねがい社長 タイマー',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        brightness: Brightness.light, // 明るいテーマ (Light Mode)
+
+        colorScheme: const ColorScheme.light(
+          primary: Colors.black87,    // 主要な色（暗いグレー/ほぼ黒）
+          onPrimary: Colors.white,    // primary 上のテキスト色
+          secondary: Colors.grey,     // 補助的な色（中間のグレー）
+          onSecondary: Colors.white,  // secondary 上のテキスト色
+
+          surface: Colors.white,      // カードやシートの背景色
+          onSurface: Colors.black87,  // surface 上のテキスト色
+
+          error: Colors.red,
+          onError: Colors.white,
+        ),
+
+        // AppBarTheme も ColorScheme の色を参照するように変更
+        appBarTheme: const AppBarTheme( // const を維持
+          backgroundColor: Colors.black87, // ColorSchemeのprimaryと同じ色を直接指定
+          foregroundColor: Colors.white,      // ColorSchemeのonPrimaryと同じ色を直接指定
+          elevation: 0,
+          centerTitle: true,
+        ),
+
+        // テキストテーマの調整 (Optional: より洗練されたタイポグラフィ)
+        // 好みに合わせてフォントサイズなどを調整できます。
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(fontSize: 96.0, fontWeight: FontWeight.bold),
+          displayMedium: TextStyle(fontSize: 60.0, fontWeight: FontWeight.bold),
+          displaySmall: TextStyle(fontSize: 48.0, fontWeight: FontWeight.bold),
+          headlineLarge: TextStyle(fontSize: 34.0, fontWeight: FontWeight.bold),
+          headlineMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+          headlineSmall: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+          titleLarge: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
+          titleMedium: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+          titleSmall: TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal),
+          bodyLarge: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+          bodyMedium: TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal),
+          bodySmall: TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal),
+          labelLarge: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
+          labelMedium: TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal),
+          labelSmall: TextStyle(fontSize: 10.0, fontWeight: FontWeight.normal),
+        ),
+
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'おねがい社長 イベントタイマー'),
     );
   }
 }
-
